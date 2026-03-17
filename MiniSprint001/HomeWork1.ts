@@ -240,4 +240,122 @@ const deepCopy = JSON.parse(JSON.stringify(masina1));
 deepCopy.specs.year = 2021;
 console.log(masina1.specs.year); // nu afecteaza masina1
 
+console.log();
 
+// 1.6 Arrays – accessor, iteration, and mutator methods
+
+const numbers: number[] = [1, 2, 3, 4, 5];
+
+// accessor methods - nu modifica array ul original
+
+console.log(numbers.slice(1, 4));
+console.log(numbers.concat([6, 10, 11]));
+console.log(numbers.join("-"));
+console.log(numbers.includes(1));
+
+console.log();
+
+// iteration methods
+// numbers.forEach(num => console.log(num));
+console.log(numbers.map(x => x * 2));
+console.log(numbers.filter(x => x % 2 == 0));
+console.log(numbers.reduce((acc, x) => acc + x, 0));
+console.log(numbers.find(n => n > 3));
+console.log(numbers.some(n => n > 4));
+console.log(numbers.every(n => n > 0));
+
+console.log();
+
+// mutator methods - modifica array ul original
+numbers.push(6);
+console.log(numbers);
+
+numbers.pop(); // sterge si returneaza ultimul element
+console.log(numbers);
+
+numbers.shift(); // sterge si returneaza primul element
+console.log(numbers);
+
+numbers.unshift(0); // adauga element la inceputul array ului
+console.log(numbers);
+
+numbers.splice(2, 1); // sterge elementul de la index 2
+console.log(numbers);
+
+numbers.sort((a, b) => b - a);
+console.log(numbers);
+
+numbers.reverse();
+console.log(numbers);
+
+// 1.7Promises and callbacks
+console.log();
+
+// a promise has 4 (care sunt de fapt 3) states: fulfilled, rejected, pending, settled
+// fullfilled - action succeeded
+// rejected - action failed
+// pending - action is still ongoing
+// settled - action is either fulfilled or rejected
+
+type User = {
+    id: number;
+    name: string;
+}
+
+function fetchUser(userId: number): Promise<User> {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            if (userId === 1) {
+                resolve({ id: 1, name: "John Doe" });
+            } else {
+                reject(new Error("User not found"));
+            }
+        }, 1000);
+    });
+}
+
+fetchUser(1)
+    .then(user => {
+        console.log("User fetched:", user);
+        return user.name;
+    })
+    .then(userName => {
+        console.log("User name:", userName);
+    })
+    .catch(error => {
+        console.error("Error fetching user:", error);
+    })
+    .finally(() => {
+        console.log("Operation completed");
+    });
+
+// 1.8 async await
+
+const httpCodes = [102, 200, 201, 202, 400, 401, 403, 404, 500];
+const LINK_PISICI = "https://http.cat/";
+
+// for each la async await nu asteapta, in loc se foloseste for..of
+
+async function fetchCatImage(code: number) {
+    try {
+        const response = await fetch(`${LINK_PISICI}${code}`);
+        console.log("Pisica:", response.ok);
+    } catch (error) {
+        console.error("Eroare la fetch:", error);
+    }
+}
+fetchCatImage(200);
+
+// concurrency
+
+async function fetchAllCatImages() {
+    try {
+        const responses = await Promise.all(httpCodes.map(code => fetch(`${LINK_PISICI}${code}`)));
+        console.log("URL uri apelate:", responses.map(r => r.url));
+    } catch (error) {
+        console.error("Eroare la fetch:", error);
+    }
+}
+fetchAllCatImages();
+
+// 1.9 Closures
