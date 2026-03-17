@@ -154,3 +154,90 @@ type AdminType = UserType & {
 
 // Type suporta tipuri multiple
 type ID_Type = string | number;
+
+// 1.4 Spreadoperator – explanation and usage examples.
+
+// transforma un array intr-o serie de argumente
+
+let spread = [1,2,3,4,5];
+// console.log(Math.max(spread)) // eroare
+console.log(Math.max(...spread));
+
+// folosit si la concatenare
+
+let a = [1, 2, 3];
+let b = [4, 5];
+a = [...a, ...b];
+console.log(spread.length === a.length && spread.every((val, i) => val === a[i]));
+
+// exemplu personal (din licenta)
+            // if (!analysis.needsData) {
+            //     return {
+            //         message: analysis.response,
+            //         conversationHistory: [
+            //             ...conversationHistory,
+            //             { role: 'user', content: userMessage },
+            //             { role: 'assistant', content: analysis.response },
+            //         ],
+            //     };
+            // }
+// bucata de cod din logica unui chatbot - daca chatbotul nu are nevoie de date din backend construim un istoric al conversatiei
+// ca sa aibe tot contextul necesar pentru viitoare prompt-uri
+
+// 1.5 Objects – how to iterate over an object and how to create a deep copy.
+
+// avem obiecte de tip interface sau obiecte de tip type cu diferente notate anterior
+type Car = {
+    brand: string;
+    model: string;
+    specs: {
+        year: number;
+    }
+}
+
+const masina1: Car = { brand: "Audi", model: "A4", specs: { year: 2009 } };
+const masina2: Car = { brand: "Toyota", model: "Corolla", specs: { year: 2013 } };
+const masina3: Car = { brand: "Ford", model: "Fiesta", specs: { year: 2002 } };
+
+const masini = [masina1, masina2, masina3];
+
+// tipuri de iterari
+console.log();
+
+// 1. for..in
+for(const key in masina1) {
+    console.log(masina1[key as keyof Car]);
+}
+
+// 2. Object.keys
+Object.keys(masina2).forEach(key => {
+    console.log(masina2[key as keyof Car]);
+});
+
+// 3. Object.values
+Object.values(masina3).forEach(value => {
+    console.log(value);
+}); 
+
+// 4. Object.entries
+Object.entries(masina1).forEach(([key, value]) => {
+    console.log(key, value);
+});
+
+console.log();
+
+// shallow copy - copiaza doar referinta daca avem obiecte imbricate
+const shallowCopy = { ...masina1 };
+shallowCopy.specs.year = 2020;
+shallowCopy.brand = "BMW";
+console.log(masina1.brand); // nu afecteaza masina1 pentru ca brandul nu este un obiect imbricat
+console.log(masina1.specs.year); // afecteaza si masina1 pentru ca specs este un obiect imbricat
+
+console.log();
+
+// deep copy
+const deepCopy = JSON.parse(JSON.stringify(masina1));
+deepCopy.specs.year = 2021;
+console.log(masina1.specs.year); // nu afecteaza masina1
+
+
