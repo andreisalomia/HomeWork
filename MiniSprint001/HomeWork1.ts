@@ -359,3 +359,36 @@ async function fetchAllCatImages() {
 fetchAllCatImages();
 
 // 1.9 Closures
+
+// global variables can be local/private with closures
+// closures make it possible for a function to have "private" variables
+
+function createCounter() {
+    let count = 0;
+
+    return {
+            increment: () => count++ ,
+            getValue: () => count
+    };
+}
+
+// functie similara, alta mod de a scrie closures
+const counter2 = (function () {
+    let count = 0;
+
+    return {
+        increment: function () {
+            count++;
+            console.log(count);
+        },
+        reset: function () {
+            count = 0;
+            console.log("S-a resetat");
+        }
+    };
+})(); // paranteze finale pentru ca e immediately invoked function
+
+const counter = createCounter();
+counter.increment();
+counter.increment();
+console.log("COUNTER VALUE: ", counter.getValue());
