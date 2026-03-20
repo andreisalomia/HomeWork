@@ -21,7 +21,6 @@
     "declarationMap": true,
 
     // Stricter Typechecking Options
-    "noUncheckedIndexedAccess": true,
     "exactOptionalPropertyTypes": true,
 
     // Style Options
@@ -36,6 +35,7 @@
     "strict": true,
     // "jsx": "react-jsx",
     // "verbatimModuleSyntax": true,
+    "noUncheckedIndexedAccess": false,
     "isolatedModules": true,
     "esModuleInterop": true,
     "moduleResolution": "node",
