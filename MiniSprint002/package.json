@@ -1,11 +1,20 @@
 {
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "dev": "nodemon src/server.ts"
+  },
   "dependencies": {
     "express": "^5.2.1",
-    "sequelize": "^6.37.8"
+    "sequelize": "^6.37.8",
+    "pg": "^8.13.3",
+    "pg-hstore": "^2.3.4"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
     "@types/node": "^25.5.0",
-    "@types/sequelize": "^4.28.20"
+    "typescript": "^5.8.2",
+    "ts-node": "^10.9.2",
+    "nodemon": "^3.1.9"
   }
 }

@@ -22,8 +22,12 @@ services:
       - hotels-network
 
   server:
-    build: src/
+    build:
+      context: .
+      dockerfile: src/Dockerfile
     container_name: express_server
+    env_file:
+      - .env
     ports:
       - "${PORT_SERVER}:3000"
     depends_on:
