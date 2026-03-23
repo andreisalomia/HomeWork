@@ -3,15 +3,15 @@ import path from "path";
 import { Hotel, City, Region } from "./models";
 
 function parseCSV(filepath: string): Record<string, string>[] {
-    const content = fs.readFileSync(filepath, "utf-8");
-    const lines = content.split("\n").filter((l) => l.trim());
+    const lines = fs.readFileSync(filepath, "utf-8").split("\n").filter((l) => l.trim());
+    
     const headers = lines[0].split(";").map((h) => h.trim());
 
     return lines.slice(1).map((line) => {
         const values = line.split(";").map((v) => v.trim());
         const row: Record<string, string> = {};
         headers.forEach((h, i) => {
-            row[h] = values[i] !== undefined ? values[i] : "";
+            row[h] = values[i] ?? "";
         });
         return row;
     });
@@ -28,16 +28,16 @@ export async function seed() {
     const rows = parseCSV(csvPath);
     console.log(`Seeding ${rows.length} rows...`);
 
-    const uniqueCities = new Map<string, string>();
+    const uniqueCities = new Set<string>();
     for (const row of rows) {
         const name = row["Property City Name"];
         const country = row["Property Country Code"];
-        if (name) uniqueCities.set(`${name}|${country}`, country);
+        if (name) uniqueCities.add(`${name}|${country}`);
     }
 
     const cityMap = new Map<string, number>();
-    for (const [key, country] of uniqueCities) {
-        const cityName = key.split("|")[0];
+    for (const key of uniqueCities) {
+        const [cityName, country] = key.split("|");
         const city = await City.create({
             CityName: cityName,
             Country: country,
@@ -72,10 +72,8 @@ export async function seed() {
         }
 
         const cityKey = `${row["Property City Name"]}|${row["Property Country Code"]}`;
-        const cityID = cityMap.get(cityKey) ?? null;
-        const regionID = row["Property State/Province"]
-            ? (regionMap.get(row["Property State/Province"]) ?? null)
-            : null;
+        const cityID = cityMap.get(cityKey) || null;
+        const regionID = row["Property State/Province"] ? (regionMap.get(row["Property State/Province"]) || null) : null;
 
         try {
             await Hotel.create({

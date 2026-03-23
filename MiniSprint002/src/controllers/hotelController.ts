@@ -65,7 +65,7 @@ export const deleteHotel = async (req: Request, res: Response): Promise<void> =>
       res.status(404).json({ error: 'Hotel not found' });
       return;
     }
-    res.status(204).send();
+    res.status(200).send();
   } catch (err) {
     res.status(500).json({ error: 'Failed to delete hotel' });
   }
